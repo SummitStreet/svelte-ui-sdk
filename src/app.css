@@ -1,0 +1,354 @@
+/**
+ * @license
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2025 David Padgett/Summit Street Technologies.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @file
+ * The app.css module contains style definitions for baseline implementations of
+ * of the styles used by the components in this package.  Consumers are expected
+ * to copy, adapt, or replace these rules entirely.  The "Demo Layout" section
+ * is used only by the demo harness in src/routes/.
+ */
+
+/**
+ * @license
+ * The MIT License (MIT)
+ * ...
+ *
+ * @file
+ * Reference styles for svelte-ui-sdk components.
+ *
+ * The "Component Styles" section documents the CSS class names produced by
+ * each component and provides a baseline implementation. Consumers are
+ * expected to copy, adapt, or replace these rules entirely.
+ *
+ * The "Demo Layout" section at the end is used only by the demo harness
+ * in src/routes/ and is not required by consumers.
+ */
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --off-white: #eff0f0;
+  --deep-slate-blue: #23435b;
+  --storm-blue: #3a4750;
+  --slate-charcoal: #4a5568;
+  --steel-gray: #6b7280;
+  --light-muted-gray: #d1dade;
+  --background-color: var(--white);
+  --title-color: var(--deep-slate-blue);
+  --border-color: var(--light-muted-gray);
+  --text-color: var(--slate-charcoal);
+  --nav-background-color: rgb(255 255 255 / 80%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+  color: var(--title-color);
+  text-decoration: none;
+}
+
+/* NavigableAction
+ *
+ * .navigable-action
+ *    base class applied to every <button> or <a>
+ * .navigable-action.visible
+ *    optional visibility modifier; hidden by default when this modifier pattern
+ *    is used (see .demo-floating below for a concrete example)
+ */
+
+.navigable-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+/* NavigationBar
+ *
+ * .navigation-bar
+ *    the <nav> element
+ * .navigation-bar span
+ *    the title text
+ * .navigation-bar-links
+ *    flex container wrapping the link buttons
+ * .navigation-bar-button
+ *    class applied to each NavigableAction link
+ */
+
+.navigation-bar {
+  align-items: center;
+  background: var(--nav-background-color);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.navigation-bar span {
+  color: var(--title-color);
+  font-size: 1.25rem;
+  font-weight: normal;
+  letter-spacing: 0.5em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.navigation-bar-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navigation-bar-button {
+  background: none;
+  border: none;
+  color: var(--title-color);
+  cursor: pointer;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  text-transform: capitalize;
+  transition: opacity 0.3s;
+}
+
+.navigation-bar-button:hover,
+.navigation-bar-button:active {
+  opacity: 1;
+}
+
+/* ProfileCard
+ *
+ * .profile-card
+ *    root container (<div>)
+ * .profile-card-title
+ *    flex row: image + name + links
+ * .profile-card-name
+ *    name text
+ * .profile-card-links
+ *    flex container wrapping link buttons/anchors
+ * .profile-card-description
+ *    description text (<p> or <div>)
+ */
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-card-title {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-card img {
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  max-width: 100px;
+  width: 100px;
+}
+
+.profile-card-name {
+  color: var(--title-color);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.profile-card-links {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.profile-card-links button,
+.profile-card-links a {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--steel-gray);
+  cursor: pointer;
+  display: flex;
+  line-height: 1;
+  opacity: 0.6;
+  padding: 0;
+  transition: opacity 0.3s;
+}
+
+.profile-card-links button:hover,
+.profile-card-links a:hover {
+  opacity: 1;
+}
+
+.profile-card-description {
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* Section
+ *
+ * Section class names encode each element's position within the hierarchy.
+ * Given a root className of "section", top-level sections receive classes
+ * "section-0", "section-1", etc.; their children receive "section-0-0",
+ * "section-0-1", etc.  Contents <div> elements follow the same path with a
+ * "-contents" suffix: "section-0-contents", "section-0-0-contents", etc.
+ *
+ * CSS attribute selectors target groups of related elements:
+ *
+ *   [class^="section-"]    all <section> elements at any depth
+ *   [class$="-contents"]   all contents <div> elements at any depth
+ *   [class^="section-0"]   all elements under the first top-level section
+ *   [class^="section-0-"]  child sections of the first top-level section
+ */
+
+[class^="section-"] {
+  padding: 2rem;
+}
+
+[class^="section-"] h2 {
+  color: var(--title-color);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+[class^="section-"] p {
+  color: var(--text-color);
+  font-size: 1.125rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+[class$="-contents"] {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+[class^="section-0-"] {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+[class^="section-0-"] h2 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+[class^="section-0-"] p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Demo Layout.  These styles support src/routes/ only and are not required. */
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 2rem;
+}
+
+.demo h1 {
+  color: var(--title-color);
+  font-size: 2rem;
+}
+
+.demo-component {
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+.demo-component > h2 {
+  color: var(--title-color);
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.demo-row {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.demo-note {
+  color: var(--steel-gray);
+  font-size: 0.875rem;
+}
+
+.demo-note code {
+  background: var(--off-white);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  padding: 0.1rem 0.3rem;
+}
+
+/* Demo floating button — illustrates the visible prop pattern. */
+.demo-floating {
+  align-items: center;
+  background-color: var(--title-color);
+  border: none;
+  border-radius: 50%;
+  bottom: 2rem;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.25rem;
+  height: 3rem;
+  justify-content: center;
+  opacity: 0;
+  position: fixed;
+  right: 2rem;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  visibility: hidden;
+  width: 3rem;
+}
+
+.demo-floating.visible {
+  opacity: 1;
+  visibility: visible;
+}

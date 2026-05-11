@@ -1,0 +1,101 @@
+{
+  "name": "@summitstreet/svelte-ui-sdk",
+  "version": "1.0.0",
+  "author": "David Padgett <https://github.com/SummitStreet>",
+  "license": "MIT",
+  "description": "Svelte UI components for use with modern web applications.",
+  "keywords": [
+    "typescript",
+    "sdk",
+    "svelte",
+    "dom",
+    "components",
+    "web",
+    "ui"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "exports": {
+    ".": {
+      "svelte": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SummitStreet/svelte-ui-sdk.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build:pre": "tsx scripts/pre-build.ts",
+    "build:post": "tsx scripts/post-build.ts",
+    "build": "npm run build:pre && svelte-kit sync && svelte-package && tsc --project tsconfig.build.json && vite build && npm run build:post",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "coverage": "npm run test:unit -- --run --coverage",
+    "dev": "npm run build:pre && vite dev",
+    "format": "prettier --write . && stylelint --fix '**/*.css' '**/*.svelte'",
+    "lint": "eslint . && stylelint '**/*.css' '**/*.svelte'",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build && npm test",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags",
+    "test:unit": "vitest",
+    "test": "npm run test:unit -- --run"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@eslint/markdown": "8.0.1",
+    "@html-eslint/eslint-plugin": "0.60.0",
+    "@html-eslint/parser": "0.60.0",
+    "@sveltejs/kit": "2.57.1",
+    "@sveltejs/package": "2.5.7",
+    "@sveltejs/vite-plugin-svelte": "7.0.0",
+    "@tsconfig/node24": "24.0.4",
+    "@types/node": "25.6.0",
+    "@typescript-eslint/eslint-plugin": "8.58.2",
+    "@typescript-eslint/parser": "8.58.2",
+    "@vitest/browser-playwright": "4.1.5",
+    "@vitest/coverage-v8": "4.1.5",
+    "concurrently": "9.2.1",
+    "eslint": "10.3.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-jsdoc": "62.9.0",
+    "eslint-plugin-json": "4.0.1",
+    "eslint-plugin-simple-import-sort": "13.0.0",
+    "eslint-plugin-svelte": "3.17.0",
+    "globals": "17.6.0",
+    "markdownlint-cli": "0.48.0",
+    "nodemon": "3.1.14",
+    "postcss-html": "1.8.1",
+    "prettier": "3.8.3",
+    "prettier-plugin-svelte": "3.5.1",
+    "shx": "0.4.0",
+    "stylelint": "17.9.1",
+    "stylelint-config-standard": "40.0.0",
+    "stylelint-prettier": "5.0.3",
+    "svelte-check": "4.4.6",
+    "svelte-eslint-parser": "1.6.0",
+    "ts-node": "10.9.2",
+    "tsx": "4.21.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.1",
+    "vite": "8.0.8",
+    "vitest": "4.1.5",
+    "vitest-browser-svelte": "2.1.1"
+  },
+  "peerDependencies": {
+    "svelte": ">=5.0.0"
+  },
+  "dependencies": {}
+}

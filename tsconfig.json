@@ -1,0 +1,27 @@
+{
+  "extends": ["@tsconfig/node24/tsconfig.json", "./.svelte-kit/tsconfig.json"],
+  "include": ["*.ts", "scripts/**/*.ts", "src/**/*.ts", "src/**/*.svelte", "tests/**/*.ts"],
+  "exclude": ["build", "dist", "node_modules"],
+  "compilerOptions": {
+    "lib": [
+      "es2024",
+      "esnext.array",
+      "ESNext.Collection",
+      "ESNext.Error",
+      "es2025.iterator",
+      "es2025.promise",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "rewriteRelativeImportExtensions": true,
+    "typeRoots": ["./node_modules/@types", "./**/typescript/**/*.d.ts"],
+    "verbatimModuleSyntax": true
+  }
+}
