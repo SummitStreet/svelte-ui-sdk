@@ -7,6 +7,7 @@ A set of composable, data-driven Svelte 5 UI components for building modern web 
 - [Components](#components)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [ItemRotator](#itemrotator)
   - [NavigableAction](#navigableaction)
   - [NavigationBar](#navigationbar)
   - [ProfileCard](#profilecard)
@@ -22,6 +23,7 @@ A set of composable, data-driven Svelte 5 UI components for building modern web 
 
 | Component         | Description                                                                                                                                                           |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ItemRotator`     | Cycles through an array of text strings or Svelte snippets, rendering the current item in a configurable HTML element with a fade transition between items.            |
 | `NavigableAction` | Renders a `<button>` or `<a>` depending on whether an `href` is provided. Supports icon snippets and a `visible` CSS modifier.                                        |
 | `NavigationBar`   | Renders a `<nav>` element containing a title and a row of `NavigableAction` links driven by a context object.                                                         |
 | `ProfileCard`     | Renders a profile panel with an image, name, social/contact links, and a text or snippet description.                                                                 |
@@ -66,14 +68,61 @@ npm install @summitstreet/svelte-ui-sdk
 All components and types are exported from the package root:
 
 ```ts
-import { NavigableAction, NavigationBar, ProfileCard, Section } from "@summitstreet/svelte-ui-sdk";
+import { ItemRotator, NavigableAction, NavigationBar, ProfileCard, Section } from "@summitstreet/svelte-ui-sdk";
 import type {
+  ItemRotatorProperties,
   NavigableActionDescriptor,
   NavigationBarContext,
   ProfileCardContext,
   SectionDescriptor,
 } from "@summitstreet/svelte-ui-sdk";
 ```
+
+### ItemRotator
+
+Cycles through an array of text strings or Svelte snippets, rendering the current item inside a configurable HTML element. A `hidden` CSS class is applied during the transition between items, enabling a fade effect via CSS. Announces changes to screen readers via `aria-live="polite"`.
+
+```svelte
+<script lang="ts">
+  import { ItemRotator } from "@summitstreet/svelte-ui-sdk";
+
+  const outcomes = ["We build great software.", "We move fast.", "We ship quality."];
+</script>
+
+<!-- Rotate text strings in a span (default) -->
+<ItemRotator items={outcomes} />
+
+<!-- Rotate inside a div with a custom class and timing -->
+<ItemRotator items={outcomes} elementType="div" className="hero-rotator" interval={3000} transition={500} />
+
+<!-- Rotate Svelte snippets -->
+{#snippet slideA()}<strong>Bold statement.</strong>{/snippet}
+{#snippet slideB()}<em>Subtle point.</em>{/snippet}
+<ItemRotator items={[slideA, slideB]} elementType="p" />
+```
+
+**Props**
+
+| Prop          | Type                                    | Default          | Description                                                              |
+| ------------- | --------------------------------------- | ---------------- | ------------------------------------------------------------------------ |
+| `items`       | `(string \| Snippet<[]>)[]`             | required         | Items to rotate through. Strings render as text; snippets render as HTML.|
+| `elementType` | `"span" \| "div" \| "p" \| "section"`  | `"span"`         | HTML element rendered as the container.                                  |
+| `id`          | `string`                                | —                | HTML `id` attribute.                                                     |
+| `className`   | `string`                                | `"item-rotator"` | CSS class applied to the container element.                              |
+| `interval`    | `number`                                | `2500`           | Milliseconds between item rotations.                                     |
+| `transition`  | `number`                                | `400`            | Milliseconds the `hidden` class is held before the next item is shown.   |
+
+**Exported constants**
+
+| Constant            | Value            | Description                               |
+| ------------------- | ---------------- | ----------------------------------------- |
+| `defaultClassName`  | `"item-rotator"` | Default CSS class applied to the element. |
+| `defaultInterval`   | `2500`           | Default rotation interval in ms.          |
+| `defaultTransition` | `400`            | Default transition duration in ms.        |
+
+> **Note:** When `items` contains zero or one item the rotation interval is not started and the `hidden` class is never applied.
+
+---
 
 ### NavigableAction
 
@@ -345,6 +394,7 @@ The package ships no global styles. Each component applies CSS class names to it
 A reference stylesheet is included at `src/app.css` in the source tree. It documents the class names produced by each component and provides a baseline implementation suitable for copying and adapting:
 
 ```
+ItemRotator      →  .item-rotator, .item-rotator.hidden
 NavigableAction  →  .navigable-action, .navigable-action.visible
 NavigationBar    →  .navigation-bar, .navigation-bar span, .navigation-bar-links, .navigation-bar-button
 ProfileCard      →  .profile-card, .profile-card-title, .profile-card-name, .profile-card-links, .profile-card-description

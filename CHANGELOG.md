@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-05-14
+
+### Added
+
+#### Components
+
+- **`ItemRotator`** — renders a sequence of text strings or Svelte snippets
+  inside a `<span>`, `<div>`, `<p>`, or `<section>` element, cycling through
+  them at a configurable interval with a configurable fade transition. Exports
+  `defaultClassName`, `defaultInterval`, and `defaultTransition` constants.
+  Includes `aria-live="polite"` for screen reader compatibility.
+
+#### Types
+
+- `ItemRotatorProperties` — Svelte component prop type for `ItemRotator`.
+
+#### Tests
+
+- Vitest browser test suite for `ItemRotator` covering element type rendering,
+  id and class attribute behaviour, `aria-live` attribute, string and snippet
+  content rendering, and rotation timing using fake timers.
+
+---
+
 ## [1.0.0] - 2026-05-08
 
 ### Added
@@ -69,4 +93,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `src/app.css` — documents the CSS class names produced by each component and
   provides a baseline implementation suitable for copying and adapting.
 
+[1.1.0]: https://github.com/SummitStreet/svelte-ui-sdk/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/SummitStreet/svelte-ui-sdk/releases/tag/v1.0.0
