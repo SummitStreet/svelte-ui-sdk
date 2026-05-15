@@ -26,6 +26,7 @@
  * Defines all module exports.
  */
 
+import ItemRotator, { type ItemRotatorProperties } from "./components/ItemRotator.svelte";
 import NavigableAction, { type NavigableActionProperties } from "./components/NavigableAction.svelte";
 import type { NavigableActionDescriptor } from "./components/NavigableAction.utils.ts";
 import NavigationBar, {
@@ -43,6 +44,8 @@ import {
 export {
   getSectionDescriptorById,
   getSectionDescriptorIndices,
+  ItemRotator,
+  type ItemRotatorProperties,
   NavigableAction,
   type NavigableActionDescriptor,
   type NavigableActionProperties,
