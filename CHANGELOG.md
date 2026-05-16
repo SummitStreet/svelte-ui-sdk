@@ -13,21 +13,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Components
 
-- **`ItemRotator`** — renders a sequence of text strings or Svelte snippets
+- **`ContentCycler`** — renders a sequence of text strings or Svelte snippets
   inside a `<span>`, `<div>`, `<p>`, or `<section>` element, cycling through
   them at a configurable interval with a configurable fade transition. Exports
   `defaultClassName`, `defaultInterval`, and `defaultTransition` constants.
   Includes `aria-live="polite"` for screen reader compatibility.
 
+#### Utilities
+
+- **`startContentCycle`** — starts a content rotation cycle and returns a
+  cleanup function that cancels it. Accepts a `ContentCyclerContext` describing
+  the item count, interval, transition duration, and three callbacks (`onHide`,
+  `onAdvance`, `onShow`) that the caller uses to update its own state. When
+  `count` is 0 or 1 no timers are started and the cleanup is a no-op. Suitable
+  for use outside of Svelte components wherever a framework-agnostic rotation
+  cycle is needed.
+
 #### Types
 
-- `ItemRotatorProperties` — Svelte component prop type for `ItemRotator`.
+- `ContentCyclerContext` — callback interface passed to `startContentCycle`;
+  describes the item count, timing, and the three state-update callbacks.
+- `ContentCyclerProperties` — Svelte component prop type for `ContentCycler`.
 
 #### Tests
 
-- Vitest browser test suite for `ItemRotator` covering element type rendering,
-  id and class attribute behaviour, `aria-live` attribute, string and snippet
+- Vitest browser test suite for `ContentCycler` covering element type rendering,
+  id and class attribute behavior, `aria-live` attribute, string and snippet
   content rendering, and rotation timing using fake timers.
+- Vitest unit test suite for `startContentCycle` covering the no-op guard,
+  callback sequencing and ordering, index advancement and wrap-around, and
+  cleanup behaviour.
+
+#### Configuration
+
+- `eslint.config.js` — raised `maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING`
+  from the default of 8 to 20 in both the markdown virtual-file and Svelte
+  parser configs to accommodate the growing number of typed code blocks in
+  `README.md`.
 
 ---
 

@@ -24,20 +24,20 @@
    * SOFTWARE.
    *
    * @file
-   * The ItemRotator module is a Svelte-specific component that repeatedly
+   * The ContentCycler module is a Svelte-specific component that repeatedly
    * renders either text values or Snippets at an interval in a specific order.
    */
 
   import type { Snippet } from "svelte";
 
-  export interface ItemRotatorProperties {
+  export interface ContentCyclerProperties {
     /** Array of strings or Svelte snippets to rotate through. */
     items: (string | Snippet<[]>)[];
     /** The HTML element to render. Defaults to 'span'. */
     elementType?: "span" | "div" | "p" | "section";
     /** The functional HTML ID. Use judiciously for accessibility or anchors. */
     id?: string;
-    /** CSS class for the container. Defaults to 'item-rotator'. */
+    /** CSS class for the container. Defaults to 'content-cycler'. */
     className?: string;
     /** Delay between item rotations, in milliseconds. Defaults to 2500ms. */
     interval?: number;
@@ -45,33 +45,36 @@
     transition?: number;
   }
 
-  export const defaultClassName = "item-rotator";
+  export const defaultClassName = "content-cycler";
   export const defaultInterval = 2500;
   export const defaultTransition = 400;
 </script>
 
 <script lang="ts">
-  const { items, elementType = "span", id, className = defaultClassName, interval = defaultInterval, transition = defaultTransition }: ItemRotatorProperties = $props();
+  import { startContentCycle } from "./ContentCycler.utils.ts";
+
+  const { items, elementType = "span", id, className = defaultClassName, interval = defaultInterval, transition = defaultTransition }: ContentCyclerProperties = $props();
 
   let index = $state(0);
   let isHidden = $state(false);
   const currentItem = $derived<string | Snippet<[]> | undefined>(items[index]);
 
-  $effect(() => {
-    if (items.length <= 1) {
-      return;
-    }
-
-    const timerId = setInterval(() => {
-      isHidden = true;
-      setTimeout(() => {
-        index = (index + 1) % items.length;
+  $effect(() =>
+    startContentCycle({
+      count: items.length,
+      interval,
+      transition,
+      onHide: () => {
+        isHidden = true;
+      },
+      onAdvance: (i) => {
+        index = i;
+      },
+      onShow: () => {
         isHidden = false;
-      }, transition);
-    }, interval);
-
-    return () => clearInterval(timerId);
-  });
+      },
+    })
+  );
 </script>
 
 <svelte:element this={elementType} {id} class={className} class:hidden={isHidden} aria-live="polite">

@@ -29,7 +29,10 @@
    */
 
   import type { NavigationBarContext, ProfileCardContext, SectionDescriptor } from "$lib";
-  import { NavigableAction, NavigationBar, ProfileCard, Section } from "$lib";
+  import { ContentCycler, NavigableAction, NavigationBar, ProfileCard, Section } from "$lib";
+
+  // ContentCycler demo data.
+  const cyclerItems = ["Build faster.", "Ship confidently.", "Iterate with ease."];
 
   // NavigableAction demo state.
   let floatingVisible = $state(false);
@@ -78,6 +81,18 @@
   <h1>svelte-ui-sdk</h1>
 
   <div class="demo-component">
+    <h2>ContentCycler</h2>
+    <div class="demo-row">
+      <ContentCycler id="demo-cycler" items={cyclerItems} />
+    </div>
+    <p class="demo-note">Rotates through string items at the default 2500ms interval with a 400ms fade transition.</p>
+    <div class="demo-row">
+      <ContentCycler id="demo-cycler-emoji" items={[smileyEmoji, winkEmoji, sunglassesEmoji]} />
+    </div>
+    <p class="demo-note">Rotates through Svelte snippet items; each item renders an emoji.</p>
+  </div>
+
+  <div class="demo-component">
     <h2>NavigableAction</h2>
     <div class="demo-row">
       <NavigableAction id="demo-button" label="Button" title="Demo button" clickEventHandler={() => alert("clicked")} />
@@ -104,3 +119,15 @@
 </div>
 
 <NavigableAction id="demo-floating" className="demo-floating" label="↑" title="Floating button demo" visible={floatingVisible} clickEventHandler={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
+
+{#snippet smileyEmoji()}
+  <span class="demo-emoji" role="img" aria-label="Smiling face">😊</span>
+{/snippet}
+
+{#snippet winkEmoji()}
+  <span class="demo-emoji" role="img" aria-label="Winking face">😉</span>
+{/snippet}
+
+{#snippet sunglassesEmoji()}
+  <span class="demo-emoji" role="img" aria-label="Face with sunglasses">😎</span>
+{/snippet}

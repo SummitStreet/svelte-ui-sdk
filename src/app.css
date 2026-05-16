@@ -79,6 +79,23 @@ a {
   text-decoration: none;
 }
 
+/* ContentCycler
+ *
+ * .content-cycler
+ *    the container element (span, div, p, or section)
+ * .content-cycler.hidden
+ *    applied during the fade-out transition between items; opacity is restored
+ *    once the next item has been swapped in
+ */
+
+.content-cycler {
+  transition: opacity 400ms ease-in-out;
+}
+
+.content-cycler.hidden {
+  opacity: 0;
+}
+
 /* NavigableAction
  *
  * .navigable-action
@@ -323,6 +340,12 @@ a {
   border-radius: 3px;
   font-size: 0.8rem;
   padding: 0.1rem 0.3rem;
+}
+
+/* Demo emoji — sizes emoji snippets used in the ContentCycler snippet demo. */
+.demo-emoji {
+  font-size: 3rem;
+  line-height: 1;
 }
 
 /* Demo floating button — illustrates the visible prop pattern. */

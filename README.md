@@ -7,7 +7,7 @@ A set of composable, data-driven Svelte 5 UI components for building modern web 
 - [Components](#components)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [ItemRotator](#itemrotator)
+  - [ContentCycler](#ContentCycler)
   - [NavigableAction](#navigableaction)
   - [NavigationBar](#navigationbar)
   - [ProfileCard](#profilecard)
@@ -23,7 +23,7 @@ A set of composable, data-driven Svelte 5 UI components for building modern web 
 
 | Component         | Description                                                                                                                                                           |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ItemRotator`     | Cycles through an array of text strings or Svelte snippets, rendering the current item in a configurable HTML element with a fade transition between items.            |
+| `ContentCycler`   | Cycles through an array of text strings or Svelte snippets, rendering the current item in a configurable HTML element with a fade transition between items.           |
 | `NavigableAction` | Renders a `<button>` or `<a>` depending on whether an `href` is provided. Supports icon snippets and a `visible` CSS modifier.                                        |
 | `NavigationBar`   | Renders a `<nav>` element containing a title and a row of `NavigableAction` links driven by a context object.                                                         |
 | `ProfileCard`     | Renders a profile panel with an image, name, social/contact links, and a text or snippet description.                                                                 |
@@ -68,9 +68,17 @@ npm install @summitstreet/svelte-ui-sdk
 All components and types are exported from the package root:
 
 ```ts
-import { ItemRotator, NavigableAction, NavigationBar, ProfileCard, Section } from "@summitstreet/svelte-ui-sdk";
+import {
+  ContentCycler,
+  NavigableAction,
+  NavigationBar,
+  ProfileCard,
+  Section,
+  startContentCycle,
+} from "@summitstreet/svelte-ui-sdk";
 import type {
-  ItemRotatorProperties,
+  ContentCyclerContext,
+  ContentCyclerProperties,
   NavigableActionDescriptor,
   NavigationBarContext,
   ProfileCardContext,
@@ -78,47 +86,47 @@ import type {
 } from "@summitstreet/svelte-ui-sdk";
 ```
 
-### ItemRotator
+### ContentCycler
 
 Cycles through an array of text strings or Svelte snippets, rendering the current item inside a configurable HTML element. A `hidden` CSS class is applied during the transition between items, enabling a fade effect via CSS. Announces changes to screen readers via `aria-live="polite"`.
 
 ```svelte
 <script lang="ts">
-  import { ItemRotator } from "@summitstreet/svelte-ui-sdk";
+  import { ContentCycler } from "@summitstreet/svelte-ui-sdk";
 
   const outcomes = ["We build great software.", "We move fast.", "We ship quality."];
 </script>
 
 <!-- Rotate text strings in a span (default) -->
-<ItemRotator items={outcomes} />
+<ContentCycler items={outcomes} />
 
 <!-- Rotate inside a div with a custom class and timing -->
-<ItemRotator items={outcomes} elementType="div" className="hero-rotator" interval={3000} transition={500} />
+<ContentCycler items={outcomes} elementType="div" className="hero-rotator" interval={3000} transition={500} />
 
 <!-- Rotate Svelte snippets -->
 {#snippet slideA()}<strong>Bold statement.</strong>{/snippet}
 {#snippet slideB()}<em>Subtle point.</em>{/snippet}
-<ItemRotator items={[slideA, slideB]} elementType="p" />
+<ContentCycler items={[slideA, slideB]} elementType="p" />
 ```
 
 **Props**
 
-| Prop          | Type                                    | Default          | Description                                                              |
-| ------------- | --------------------------------------- | ---------------- | ------------------------------------------------------------------------ |
-| `items`       | `(string \| Snippet<[]>)[]`             | required         | Items to rotate through. Strings render as text; snippets render as HTML.|
-| `elementType` | `"span" \| "div" \| "p" \| "section"`  | `"span"`         | HTML element rendered as the container.                                  |
-| `id`          | `string`                                | —                | HTML `id` attribute.                                                     |
-| `className`   | `string`                                | `"item-rotator"` | CSS class applied to the container element.                              |
-| `interval`    | `number`                                | `2500`           | Milliseconds between item rotations.                                     |
-| `transition`  | `number`                                | `400`            | Milliseconds the `hidden` class is held before the next item is shown.   |
+| Prop          | Type                                  | Default            | Description                                                               |
+| ------------- | ------------------------------------- | ------------------ | ------------------------------------------------------------------------- |
+| `items`       | `(string \| Snippet<[]>)[]`           | required           | Items to rotate through. Strings render as text; snippets render as HTML. |
+| `elementType` | `"span" \| "div" \| "p" \| "section"` | `"span"`           | HTML element rendered as the container.                                   |
+| `id`          | `string`                              | —                  | HTML `id` attribute.                                                      |
+| `className`   | `string`                              | `"content-cycler"` | CSS class applied to the container element.                               |
+| `interval`    | `number`                              | `2500`             | Milliseconds between item rotations.                                      |
+| `transition`  | `number`                              | `400`              | Milliseconds the `hidden` class is held before the next item is shown.    |
 
 **Exported constants**
 
-| Constant            | Value            | Description                               |
-| ------------------- | ---------------- | ----------------------------------------- |
-| `defaultClassName`  | `"item-rotator"` | Default CSS class applied to the element. |
-| `defaultInterval`   | `2500`           | Default rotation interval in ms.          |
-| `defaultTransition` | `400`            | Default transition duration in ms.        |
+| Constant            | Value              | Description                               |
+| ------------------- | ------------------ | ----------------------------------------- |
+| `defaultClassName`  | `"content-cycler"` | Default CSS class applied to the element. |
+| `defaultInterval`   | `2500`             | Default rotation interval in ms.          |
+| `defaultTransition` | `400`              | Default transition duration in ms.        |
 
 > **Note:** When `items` contains zero or one item the rotation interval is not started and the `hidden` class is never applied.
 
@@ -342,8 +350,46 @@ CSS attribute selectors can target groups of elements:
 ## Utilities
 
 ```ts
-import { getSectionDescriptorById, getSectionDescriptorIndices } from "@summitstreet/svelte-ui-sdk";
+import { getSectionDescriptorById, getSectionDescriptorIndices, startContentCycle } from "@summitstreet/svelte-ui-sdk";
+import type { ContentCyclerContext } from "@summitstreet/svelte-ui-sdk";
 ```
+
+### `startContentCycle`
+
+Starts a content rotation cycle and returns a cleanup function that cancels it. Framework-agnostic — usable in any TypeScript project, not only inside Svelte components.
+
+```ts
+const stop = startContentCycle({
+  count: items.length,
+  interval: 2500,
+  transition: 400,
+  onHide: () => {
+    isHidden = true;
+  },
+  onAdvance: (i) => {
+    index = i;
+  },
+  onShow: () => {
+    isHidden = false;
+  },
+});
+
+// Cancel the cycle (e.g. on unmount):
+stop();
+```
+
+**`ContentCyclerContext`**
+
+| Field        | Type                      | Description                                                              |
+| ------------ | ------------------------- | ------------------------------------------------------------------------ |
+| `count`      | `number`                  | Total number of items. No timers are started when this is 0 or 1.        |
+| `interval`   | `number`                  | Milliseconds between rotations.                                          |
+| `transition` | `number`                  | Milliseconds between `onHide` and `onAdvance`/`onShow`.                  |
+| `onHide`     | `() => void`              | Called when the current item should begin hiding.                        |
+| `onAdvance`  | `(index: number) => void` | Called with the next index once the transition duration has elapsed.     |
+| `onShow`     | `() => void`              | Called immediately after `onAdvance` when the next item should be shown. |
+
+---
 
 ### `getSectionDescriptorById`
 
@@ -394,7 +440,7 @@ The package ships no global styles. Each component applies CSS class names to it
 A reference stylesheet is included at `src/app.css` in the source tree. It documents the class names produced by each component and provides a baseline implementation suitable for copying and adapting:
 
 ```
-ItemRotator      →  .item-rotator, .item-rotator.hidden
+ContentCycler    →  .content-cycler, .content-cycler.hidden
 NavigableAction  →  .navigable-action, .navigable-action.visible
 NavigationBar    →  .navigation-bar, .navigation-bar span, .navigation-bar-links, .navigation-bar-button
 ProfileCard      →  .profile-card, .profile-card-title, .profile-card-name, .profile-card-links, .profile-card-description

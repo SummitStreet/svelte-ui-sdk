@@ -26,7 +26,8 @@
  * Defines all module exports.
  */
 
-import ItemRotator, { type ItemRotatorProperties } from "./components/ItemRotator.svelte";
+import ContentCycler, { type ContentCyclerProperties } from "./components/ContentCycler.svelte";
+import { type ContentCyclerContext, startContentCycle } from "./components/ContentCycler.utils.ts";
 import NavigableAction, { type NavigableActionProperties } from "./components/NavigableAction.svelte";
 import type { NavigableActionDescriptor } from "./components/NavigableAction.utils.ts";
 import NavigationBar, {
@@ -42,10 +43,11 @@ import {
 } from "./components/Section.utils.ts";
 
 export {
+  ContentCycler,
+  type ContentCyclerContext,
+  type ContentCyclerProperties,
   getSectionDescriptorById,
   getSectionDescriptorIndices,
-  ItemRotator,
-  type ItemRotatorProperties,
   NavigableAction,
   type NavigableActionDescriptor,
   type NavigableActionProperties,
@@ -58,4 +60,5 @@ export {
   Section,
   type SectionDescriptor,
   type SectionProperties,
+  startContentCycle,
 };

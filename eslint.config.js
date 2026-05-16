@@ -83,6 +83,9 @@ export default [
       parserOptions: {
         projectService: {
           allowDefaultProject: ["*.md/*.js", "*.md/*.ts", "*.md/*.svelte"],
+          // Raised from the default of 8 to accommodate the TS and Svelte code
+          // blocks extracted from README.md by the markdown processor.
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 20,
         },
       },
     },
@@ -108,7 +111,12 @@ export default [
         ...globals.browser,
       },
       parserOptions: {
-        projectService: { allowDefaultProject: ["*.md/*.ts", "*.md/*.js", "*.md/*.svelte"] },
+        projectService: {
+          allowDefaultProject: ["*.md/*.ts", "*.md/*.js", "*.md/*.svelte"],
+          // Raised from the default of 8 to accommodate the TS and Svelte code
+          // blocks extracted from README.md by the markdown processor.
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 20,
+        },
         extraFileExtensions: [".svelte"],
         parser: tseslint.parser,
         svelteConfig,

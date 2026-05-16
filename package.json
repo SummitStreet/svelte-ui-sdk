@@ -1,6 +1,6 @@
 {
   "name": "@summitstreet/svelte-ui-sdk",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "David Padgett <https://github.com/SummitStreet>",
   "license": "MIT",
   "description": "Svelte UI components for use with modern web applications.",
